@@ -5,11 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>바이브코딩 🎧✨</title>
     <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
+    <!-- 버튼 클릭 파티클 효과를 위한 Confetti JS -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
         :root {
             --primary: #B2B2FF;
+            --primary-dark: #8F8FE6;
             --secondary: #E2CBF0;
             --accent: #D7B5EA;
+            --accent-dark: #B990D0;
             --text: #555555;
             --bg: #F9F9FF;
         }
@@ -23,63 +27,86 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            overflow-x: hidden;
         }
 
+        /* 통통 튀는 3D 헤더 */
         header {
-            background-color: var(--primary);
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
             color: white;
             width: 100%;
-            padding: 40px 0;
+            padding: 60px 0;
             text-align: center;
             border-bottom-left-radius: 50% 20px;
             border-bottom-right-radius: 50% 20px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            animation: floatDown 1s ease-out;
+            box-shadow: 0 10px 30px rgba(178, 178, 255, 0.4);
+            animation: bounceInDown 1s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            position: relative;
+            z-index: 10;
         }
 
         h1 {
-            font-size: 3rem;
+            font-size: 4rem;
             margin: 0;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+            /* 글씨 3D 그림자 효과 */
+            text-shadow: 4px 4px 0px var(--primary-dark), 8px 8px 15px rgba(0,0,0,0.2);
+            transform: perspective(500px) rotateX(10deg);
         }
 
         .subtitle {
-            font-size: 1.5rem;
-            margin-top: 10px;
+            font-size: 1.8rem;
+            margin-top: 15px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
         }
 
         .container {
-            max-width: 800px;
-            margin: 40px auto;
+            max-width: 1000px;
+            margin: 60px auto;
             padding: 20px;
             display: flex;
-            flex-direction: column;
-            gap: 30px;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 40px;
+            perspective: 1000px;
         }
 
+        /* 3D 입체 카드 */
         .card {
-            background: white;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(10px);
             border-radius: 30px;
-            padding: 30px;
-            box-shadow: 0 10px 20px rgba(178, 178, 255, 0.2);
-            transition: transform 0.3s ease;
+            padding: 40px 30px;
+            box-shadow: 0 20px 40px rgba(178, 178, 255, 0.3);
             text-align: center;
-            border: 3px solid var(--secondary);
+            border: 4px solid var(--secondary);
+            flex: 1 1 280px;
+            max-width: 350px;
+            
+            /* 자식 요소가 카드를 뚫고 나오는 3D 효과를 위해 필수 */
+            transform-style: preserve-3d; 
+            animation: popIn 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55) backwards;
         }
 
-        .card:hover {
-            transform: translateY(-10px);
+        .card:nth-child(1) { animation-delay: 0.2s; }
+        .card:nth-child(2) { animation-delay: 0.4s; }
+        .card:nth-child(3) { animation-delay: 0.6s; }
+
+        /* 카드 내부 콘텐츠가 붕 뜨는 3D 효과 */
+        .card-inner-3d {
+            transform: translateZ(60px);
         }
 
         .emoji-big {
-            font-size: 4rem;
-            margin-bottom: 15px;
-            animation: bounce 2s infinite;
+            font-size: 5rem;
+            margin-bottom: 20px;
+            display: inline-block;
+            animation: float 3s ease-in-out infinite;
+            filter: drop-shadow(0px 15px 10px rgba(0,0,0,0.2));
         }
 
         h2 {
-            color: #A2A2FF;
-            font-size: 2rem;
+            color: var(--primary-dark);
+            font-size: 2.2rem;
             margin-bottom: 15px;
         }
 
@@ -88,58 +115,94 @@
             line-height: 1.6;
         }
 
+        /* 실제로 눌리는 느낌의 3D 버튼 */
         .btn {
             background-color: var(--accent);
             color: #fff;
-            padding: 15px 30px;
+            padding: 18px 40px;
             border-radius: 50px;
-            font-size: 1.5rem;
+            font-size: 1.8rem;
             text-decoration: none;
             display: inline-block;
-            margin-top: 20px;
-            transition: all 0.3s;
+            margin-top: 30px;
             border: none;
             cursor: pointer;
-            box-shadow: 0 4px 10px rgba(215, 181, 234, 0.5);
             font-family: 'Jua', sans-serif;
+            text-shadow: 2px 2px 0px var(--accent-dark);
+            
+            /* 버튼 밑면 두께 및 그림자 */
+            box-shadow: 0 10px 0 var(--accent-dark), 0 20px 20px rgba(0,0,0,0.2);
+            transform: translateY(0);
+            transition: transform 0.1s, box-shadow 0.1s;
         }
 
-        .btn:hover {
-            background-color: #AD9DE0;
-            transform: scale(1.05);
+        .btn:active {
+            /* 클릭 시 밑면 두께가 사라지며 아래로 쑥 내려감 */
+            transform: translateY(10px);
+            box-shadow: 0 0px 0 var(--accent-dark), 0 10px 10px rgba(0,0,0,0.2);
         }
 
         footer {
             margin-top: auto;
-            padding: 20px;
+            padding: 40px;
             text-align: center;
             color: #aaa;
-            font-size: 1.1rem;
+            font-size: 1.2rem;
+            position: relative;
+            z-index: 10;
         }
 
-        @keyframes floatDown {
-            from { transform: translateY(-50px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
+        /* 애니메이션 모음 */
+        @keyframes float {
+            0%, 100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-20px) scale(1.1); }
         }
 
-        @keyframes bounce {
-            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
-            40% { transform: translateY(-20px); }
-            60% { transform: translateY(-10px); }
+        @keyframes bounceInDown {
+            0% { transform: translateY(-100%); opacity: 0; }
+            100% { transform: translateY(0); opacity: 1; }
+        }
+
+        @keyframes popIn {
+            0% { transform: scale(0.5); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
         }
 
         .vibe {
             display: inline-block;
-            animation: groove 2s ease-in-out infinite alternate;
+            animation: groove 1.5s ease-in-out infinite alternate;
         }
 
         @keyframes groove {
-            0% { transform: scale(1) rotate(-10deg); }
-            100% { transform: scale(1.2) rotate(10deg); }
+            0% { transform: scale(1) rotate(-15deg); }
+            100% { transform: scale(1.3) rotate(15deg); }
+        }
+
+        /* 배경 떠다니는 리듬 방울들 */
+        .bg-bubbles {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1;
+            overflow: hidden;
+            pointer-events: none;
+        }
+        .bubble {
+            position: absolute;
+            background: radial-gradient(circle, rgba(226,203,240,0.8) 0%, rgba(178,178,255,0.2) 100%);
+            border-radius: 50%;
+            animation: rise infinite ease-in;
+        }
+        @keyframes rise {
+            0% { transform: translateY(100vh) scale(0); opacity: 0; }
+            50% { opacity: 1; }
+            100% { transform: translateY(-20vh) scale(1.5); opacity: 0; }
         }
     </style>
 </head>
 <body>
+
+    <!-- 배경 애니메이션 방울들 -->
+    <div class="bg-bubbles" id="bubbles-container"></div>
 
     <header>
         <h1><span class="vibe">🎧</span> 바이브코딩</h1>
@@ -148,35 +211,43 @@
 
     <div class="container">
         
-        <div class="card">
-            <div class="emoji-big">🤔</div>
-            <h2>바이브코딩이 뭐예요?</h2>
-            <p>
-                새로운 노래를 처음 들을 땐 낯설지만, <br>
-                한 번 리듬을 타기 시작하면 <strong>자연스럽게 흥얼거리잖아요?</strong><br>
-                코딩도 똑같아요! 처음엔 낯설어도, 재미있게 바이브를 타다 보면 <br>내 상상 속의 세상을 마음껏 만들 수 있어요!
-            </p>
+        <!-- 바닐라 틸트(마우스 따라 3D 회전) 적용 -->
+        <div class="card" data-tilt data-tilt-max="20" data-tilt-speed="400" data-tilt-glare="true" data-tilt-max-glare="0.5">
+            <div class="card-inner-3d">
+                <div class="emoji-big">🤔</div>
+                <h2>바이브코딩이 뭐예요?</h2>
+                <p>
+                    새로운 노래를 처음 들을 땐 낯설지만, <br>
+                    한 번 리듬을 타기 시작하면 <strong>자연스럽게 흥얼거리잖아요?</strong><br>
+                    코딩도 똑같아요! 처음엔 낯설어도, 재미있게 바이브를 타다 보면 내 상상 속의 세상을 마음껏 만들 수 있어요!
+                </p>
+            </div>
         </div>
 
-        <div class="card">
-            <div class="emoji-big">🎢</div>
-            <h2>어떻게 배우나요?</h2>
-            <p>
-                어려운 외계어 같은 문법은 잠시 안녕~ 👋<br>
-                퍼즐을 맞추듯 귀여운 블록을 조립하고, <br>
-                재미있는 게임을 만들면서 <strong>자연스럽게 깨닫는</strong> 수업이에요.
-            </p>
+        <div class="card" data-tilt data-tilt-max="20" data-tilt-speed="400" data-tilt-glare="true" data-tilt-max-glare="0.5">
+            <div class="card-inner-3d">
+                <div class="emoji-big">🎢</div>
+                <h2>어떻게 배우나요?</h2>
+                <p>
+                    어려운 외계어 같은 문법은 잠시 안녕~ 👋<br>
+                    퍼즐을 맞추듯 귀여운 블록을 조립하고, <br>
+                    재미있는 게임을 만들면서 <strong>자연스럽게 깨닫는</strong> 수업이에요.
+                </p>
+            </div>
         </div>
 
-        <div class="card">
-            <div class="emoji-big">🚀</div>
-            <h2>누구나 할 수 있어요!</h2>
-            <p>
-                컴퓨터를 잘 몰라도 괜찮아요! <br>
-                친절하고 재미있게 하나씩 알려드릴게요.<br>
-                우리 함께 신나는 코딩 모험을 떠나볼까요? 🗺️
-            </p>
-            <button class="btn" onclick="alert('바이브코딩 모험을 시작합니다! 볼륨을 한껏 높이세요! 🎧✨')">모험 시작하기! 슝~ 💨</button>
+        <div class="card" data-tilt data-tilt-max="20" data-tilt-speed="400" data-tilt-glare="true" data-tilt-max-glare="0.5">
+            <div class="card-inner-3d">
+                <div class="emoji-big">🚀</div>
+                <h2>누구나 할 수 있어요!</h2>
+                <p>
+                    컴퓨터를 잘 몰라도 괜찮아요! <br>
+                    친절하고 재미있게 하나씩 알려드릴게요.<br>
+                    우리 함께 신나는 코딩 모험을 떠나볼까요? 🗺️
+                </p>
+                <!-- 누를 때 쏙 들어가는 3D 버튼 -->
+                <button class="btn" onclick="startAdventure()">모험 시작하기! 슝~ 💨</button>
+            </div>
         </div>
 
     </div>
@@ -185,5 +256,37 @@
         © 2026 바이브코딩. 모두 함께 리듬을 타요! 🎧🎶
     </footer>
 
+    <!-- 3D 틸트 효과를 위한 Vanilla Tilt JS 라이브러리 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.0/vanilla-tilt.min.js"></script>
+    <script>
+        // 배경에 떠다니는 리듬 방울 생성 스크립트
+        const container = document.getElementById('bubbles-container');
+        for(let i=0; i<15; i++) {
+            const bubble = document.createElement('div');
+            bubble.classList.add('bubble');
+            const size = Math.random() * 100 + 50; 
+            bubble.style.width = `${size}px`;
+            bubble.style.height = `${size}px`;
+            bubble.style.left = `${Math.random() * 100}%`;
+            bubble.style.animationDuration = `${Math.random() * 5 + 5}s`;
+            bubble.style.animationDelay = `${Math.random() * 5}s`;
+            container.appendChild(bubble);
+        }
+
+        // 버튼 클릭 시 축포 터지는 효과!
+        function startAdventure() {
+            confetti({
+                particleCount: 150,
+                spread: 100,
+                origin: { y: 0.6 },
+                colors: ['#B2B2FF', '#E2CBF0', '#D7B5EA', '#FFB7B2', '#B5EAD7'],
+                zIndex: 9999
+            });
+            
+            setTimeout(() => {
+                alert('바이브코딩 모험을 시작합니다! 볼륨을 한껏 높이세요! 🎧✨');
+            }, 600);
+        }
+    </script>
 </body>
 </html>
