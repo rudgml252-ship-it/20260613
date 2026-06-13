@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>바이크코딩 🚲✨</title>
+    <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #FFB7B2;
+            --secondary: #E2F0CB;
+            --accent: #B5EAD7;
+            --text: #555555;
+            --bg: #FFF9FA;
+        }
+
+        body {
+            font-family: 'Jua', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        header {
+            background-color: var(--primary);
+            color: white;
+            width: 100%;
+            padding: 40px 0;
+            text-align: center;
+            border-bottom-left-radius: 50% 20px;
+            border-bottom-right-radius: 50% 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            animation: floatDown 1s ease-out;
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin: 0;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .subtitle {
+            font-size: 1.5rem;
+            margin-top: 10px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 30px;
+            padding: 30px;
+            box-shadow: 0 10px 20px rgba(255, 183, 178, 0.2);
+            transition: transform 0.3s ease;
+            text-align: center;
+            border: 3px solid var(--secondary);
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+        }
+
+        .emoji-big {
+            font-size: 4rem;
+            margin-bottom: 15px;
+            animation: bounce 2s infinite;
+        }
+
+        h2 {
+            color: #FF9AA2;
+            font-size: 2rem;
+            margin-bottom: 15px;
+        }
+
+        p {
+            font-size: 1.3rem;
+            line-height: 1.6;
+        }
+
+        .btn {
+            background-color: var(--accent);
+            color: #444;
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-size: 1.5rem;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 20px;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(181, 234, 215, 0.5);
+            font-family: 'Jua', sans-serif;
+        }
+
+        .btn:hover {
+            background-color: #9DE0AD;
+            transform: scale(1.05);
+        }
+
+        footer {
+            margin-top: auto;
+            padding: 20px;
+            text-align: center;
+            color: #aaa;
+            font-size: 1.1rem;
+        }
+
+        @keyframes floatDown {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-20px); }
+            60% { transform: translateY(-10px); }
+        }
+
+        .bike {
+            display: inline-block;
+            animation: ride 3s linear infinite;
+        }
+
+        @keyframes ride {
+            0% { transform: translateX(-20px) rotate(-5deg); }
+            50% { transform: translateX(20px) rotate(5deg); }
+            100% { transform: translateX(-20px) rotate(-5deg); }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1><span class="bike">🚲</span> 바이크코딩</h1>
+        <div class="subtitle">자전거 타듯 쉽고 씽씽 달리는 코딩 여행! ✨</div>
+    </header>
+
+    <div class="container">
+        
+        <div class="card">
+            <div class="emoji-big">🤔</div>
+            <h2>바이크코딩이 뭐예요?</h2>
+            <p>
+                자전거(바이크)를 처음 배울 땐 자꾸 넘어지고 어렵지만, <br>
+                한 번 씽씽 달리기 시작하면 <strong>어디든 갈 수 있잖아요?</strong><br>
+                코딩도 똑같아요! 처음엔 낯설어도, 재미있게 익히면 <br>내 상상 속의 세상을 마음껏 만들 수 있어요!
+            </p>
+        </div>
+
+        <div class="card">
+            <div class="emoji-big">🎢</div>
+            <h2>어떻게 배우나요?</h2>
+            <p>
+                어려운 외계어 같은 문법은 잠시 안녕~ 👋<br>
+                퍼즐을 맞추듯 귀여운 블록을 조립하고, <br>
+                재미있는 게임을 만들면서 <strong>자연스럽게 깨닫는</strong> 수업이에요.
+            </p>
+        </div>
+
+        <div class="card">
+            <div class="emoji-big">🚀</div>
+            <h2>누구나 할 수 있어요!</h2>
+            <p>
+                컴퓨터를 잘 몰라도 괜찮아요! <br>
+                친절하고 재미있게 하나씩 알려드릴게요.<br>
+                우리 함께 신나는 코딩 모험을 떠나볼까요? 🗺️
+            </p>
+            <button class="btn" onclick="alert('바이크코딩 모험을 시작합니다! 안전벨트를 꽉 매세요! 🚲💨')">모험 시작하기! 슝~ 💨</button>
+        </div>
+
+    </div>
+
+    <footer>
+        © 2026 바이크코딩. 모두 함께 씽씽 달려요! 🚲💨
+    </footer>
+
+</body>
+</html>
